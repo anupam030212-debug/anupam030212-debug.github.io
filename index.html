@@ -152,10 +152,10 @@ function spark(x,y,n){for(let i=0;i<n;i++){const d=document.createElement("span"
 addEventListener("pointermove",e=>{if(mv)return;if(e.pointerType!="touch"){$("#cg").style.cssText+=`;left:${e.clientX}px;top:${e.clientY}px;opacity:1`;$("#cd").style.cssText+=`;left:${e.clientX}px;top:${e.clientY}px;opacity:1`;if(scrollY<innerHeight)$("#hin").style.transform=`translate(${(e.clientX/innerWidth-.5)*-18}px,${(e.clientY/innerHeight-.5)*-14}px)`}const t=performance.now();if(t-lt<45)return;lt=t;spark(e.clientX,e.clientY,2)});
 addEventListener("pointerdown",e=>{if(mv)return;const r=document.createElement("span");r.className="rp";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),800);spark(e.clientX,e.clientY,10)});
 
-const EM="abcdanupam030212@gmail.com";let rs=0;const rb=[...document.querySelectorAll("#rt button")],rmsg=$("#rmsg");
+const KEY="1886d0eb-b7ab-459f-862a-a6b0ada60f8f";let rs=0;const rb=[...document.querySelectorAll("#rt button")],rmsg=$("#rmsg");
 const L=["Poor","Fair","Good","Very good","Excellent"],cap=$("#rcap"),paint=n=>{rb.forEach((b,i)=>b.classList.toggle("on",i<n));cap.textContent=n?L[n-1]:""};
 rb.forEach((b,i)=>{b.onmouseenter=b.onfocus=()=>paint(i+1);b.onclick=()=>{rs=i+1;paint(rs)}});
-$("#rsend").onclick=async()=>{if(!rs){rmsg.textContent="Please tap a star first.";return}rmsg.textContent="Sending…";try{const r=await fetch("https://formsubmit.co/ajax/"+EM,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:"Hydrogreens rating",rating:rs+" / 5",description:$("#rdesc").value.trim()||"(none)"})});if(!r.ok)throw 0;rmsg.textContent="Thank you for rating us "+rs+"/5! 🌿";$("#rdesc").value=""}catch(x){rmsg.textContent="Couldn’t send your rating right now. Please try again."}};
+$("#rsend").onclick=async()=>{if(!rs){rmsg.textContent="Please tap a star first.";return}rmsg.textContent="Sending…";try{const r=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({access_key:KEY,subject:"Hydrogreens rating",from_name:"Hydrogreens website",rating:rs+" / 5",message:$("#rdesc").value.trim()||"(no description)"})});const j=await r.json();if(!j.success)throw 0;rmsg.textContent="Thank you for rating us "+rs+"/5! 🌿";$("#rdesc").value=""}catch(x){rmsg.textContent="Couldn’t send your rating right now. Please try again."}};
 $("#rt").onmouseleave=()=>paint(rs);
 draw();tl();
 </script></body></html>
