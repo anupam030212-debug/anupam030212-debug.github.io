@@ -66,6 +66,8 @@ footer h2{color:#fff}footer a{color:var(--g);font-weight:600;text-decoration:non
 .ch:hover,nav a:hover{transform:translateY(-2px)}.ch:hover{border-color:var(--e)}
 .tr{position:fixed;width:10px;height:10px;margin:-5px;border-radius:50% 0 50% 50%;pointer-events:none;z-index:150;animation:tf .9s ease-out forwards}@keyframes tf{to{transform:translate(var(--dx),var(--dy)) rotate(220deg) scale(.2);opacity:0}}
 .rp{position:fixed;width:20px;height:20px;margin:-10px;border:2px solid var(--e);border-radius:50%;pointer-events:none;z-index:150;animation:rpl .8s ease-out forwards}@keyframes rpl{to{transform:scale(6);opacity:0}}
+.rt{display:flex;gap:6px;justify-content:center;margin:18px 0 8px}.rt button{background:none;border:0;font-size:2.6rem;line-height:1;cursor:pointer;color:#c3cfc0;transition:.25s}.rt button.on{color:var(--g);text-shadow:0 0 18px rgba(199,169,107,.6)}.rt button:hover{transform:scale(1.25) rotate(-8deg)}
+#rdesc{width:100%;margin-top:10px;padding:14px 18px;border-radius:18px;border:1px solid var(--s);background:var(--card);font:inherit;color:inherit;resize:vertical}#rdesc:focus{outline:2px solid var(--e)}
 .rv{opacity:0;transform:translateY(34px);transition:1s}.rv.v{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}.leaf,.rip,#cg,#cd,.tr,.rp{display:none}}
 @media(hover:none){#cg,#cd{display:none}}
@@ -92,6 +94,11 @@ footer h2{color:#fff}footer a{color:var(--g);font-weight:600;text-decoration:non
 <div class="grid" id="pg"></div><p id="no" style="display:none;text-align:center;opacity:.7;margin-top:20px">No products match your search.</p></div></section>
 
 <section id="gallery" style="background:var(--m)"><div class="wrap"><span class="eyebrow">Gallery</span><h2>The Hydrogreens setup</h2><p class="lead">Illustrations of our containers and plants.</p><div class="gal" id="gl"></div></div></section>
+
+<section id="rate"><div class="wrap" style="max-width:620px"><div class="glass tilt rv" style="padding:40px 28px;text-align:center"><span class="eyebrow">Your Feedback</span><h2>Rate Hydrogreens</h2><p>Enjoyed our Class 9 A project? Tap a star to rate it.</p><div class="rt" id="rt" role="group" aria-label="Rate from 1 to 5 stars"><button aria-label="1 star">★</button><button aria-label="2 stars">★</button><button aria-label="3 stars">★</button><button aria-label="4 stars">★</button><button aria-label="5 stars">★</button></div><p id="rcap" aria-live="polite" style="min-height:1.6em;font-weight:700;color:var(--e)"></p>
+<textarea id="rdesc" rows="4" maxlength="500" placeholder="Add a description — tell us what you liked about Hydrogreens (optional)" aria-label="Description of your rating"></textarea>
+<button class="btn" id="rsend" style="margin-top:16px">Submit rating</button>
+<p id="rmsg" aria-live="polite" style="min-height:1.6em;opacity:.85;margin-top:12px"></p></div></div></section>
 
 <footer id="contact"><span class="eyebrow" style="color:var(--g)">Contact</span><h2>✉️ Contact Us</h2>
 <div class="ct"><div>Email<br><a href="mailto:AurexStudio@proton.me">AurexStudio.proton.me</a></div><div>GitHub<br><a href="https://github.com/aurexstudio" target="_blank" rel="noopener">github.com/aurexstudio</a></div></div>
@@ -145,5 +152,10 @@ function spark(x,y,n){for(let i=0;i<n;i++){const d=document.createElement("span"
 addEventListener("pointermove",e=>{if(mv)return;if(e.pointerType!="touch"){$("#cg").style.cssText+=`;left:${e.clientX}px;top:${e.clientY}px;opacity:1`;$("#cd").style.cssText+=`;left:${e.clientX}px;top:${e.clientY}px;opacity:1`;if(scrollY<innerHeight)$("#hin").style.transform=`translate(${(e.clientX/innerWidth-.5)*-18}px,${(e.clientY/innerHeight-.5)*-14}px)`}const t=performance.now();if(t-lt<45)return;lt=t;spark(e.clientX,e.clientY,2)});
 addEventListener("pointerdown",e=>{if(mv)return;const r=document.createElement("span");r.className="rp";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";document.body.appendChild(r);setTimeout(()=>r.remove(),800);spark(e.clientX,e.clientY,10)});
 
+const EM="abcdanupam030212@gmail.com";let rs=0;const rb=[...document.querySelectorAll("#rt button")],rmsg=$("#rmsg");
+const L=["Poor","Fair","Good","Very good","Excellent"],cap=$("#rcap"),paint=n=>{rb.forEach((b,i)=>b.classList.toggle("on",i<n));cap.textContent=n?L[n-1]:""};
+rb.forEach((b,i)=>{b.onmouseenter=b.onfocus=()=>paint(i+1);b.onclick=()=>{rs=i+1;paint(rs)}});
+$("#rsend").onclick=async()=>{if(!rs){rmsg.textContent="Please tap a star first.";return}rmsg.textContent="Sending…";try{const r=await fetch("https://formsubmit.co/ajax/"+EM,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:"Hydrogreens rating",rating:rs+" / 5",description:$("#rdesc").value.trim()||"(none)"})});if(!r.ok)throw 0;rmsg.textContent="Thank you for rating us "+rs+"/5! 🌿";$("#rdesc").value=""}catch(x){rmsg.textContent="Couldn’t send your rating right now. Please try again."}};
+$("#rt").onmouseleave=()=>paint(rs);
 draw();tl();
 </script></body></html>
